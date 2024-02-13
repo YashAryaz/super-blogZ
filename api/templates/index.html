@@ -79,6 +79,7 @@ body{
             <button type="submit" class="btn btn-primary">Login</button>
           </form>
           <p>Don't have an account? <a href="#" id="toggleSignup">Sign up</a></p>
+          <p>Forgot Password?<a href="#" data-toggle="modal" data-target="#passwordResetModal">Reset</a></p>
         </div>
         <div class="form-container hidden" id="signupFormContainer">
           <h2>Signup</h2>
@@ -102,13 +103,14 @@ body{
             <button type="submit" class="btn btn-primary">Signup</button>
           </form>
           <p>Already have an account? <a href="#" id="toggleLogin">Login</a></p>
+         
         </div>
         <!-- Verification Modal -->
 <div class="modal fade" id="Verification" tabindex="-1" role="dialog" aria-labelledby="verificationModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="verificationModalLabel">Verification</h5>
+        <h5 style="color: black;" class="modal-title" id="verificationModalLabel">Verification</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -119,6 +121,51 @@ body{
             <input type="number" class="form-control" id="verificationCode" placeholder="Enter verification code" required>
           </div>
           <button type="submit" class="btn btn-primary">Verify</button>
+        </form>
+        <!-- eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1Y2E1YzhkYWM3ZmJlZGEwNWFkODI4OSIsImV4cCI6MTcwNzc2MzU2N30.8zDlHuv-aXEwsUGtZioWejeTimhwzSrqj7-Rk0gEto0 -->
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="passwordResetModal" tabindex="-1" aria-labelledby="passwordResetModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" style="color: black;">
+      <div class="modal-header" >
+        <h5 class="modal-title" id="passwordResetModalLabel">Reset Password</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="resetForm">
+          <div class="mb-3">
+            <label for="resetEmail" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="resetEmail" aria-describedby="emailHelp">
+            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="passwordResetWithTokenModal" tabindex="-1" aria-labelledby="passwordResetWithTokenModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" style="color: black;">
+      <div class="modal-header">
+        <h5 class="modal-title" id="passwordResetWithTokenModalLabel">Reset Password with Token</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="resetWithTokenForm">
+          <div class="mb-3">
+            <label for="resetToken" class="form-label">Token</label>
+            <input type="text" class="form-control" id="resetToken" aria-describedby="tokenHelp">
+            <div id="tokenHelp" class="form-text">Enter the token you received in your email.</div>
+          </div>
+          <div class="mb-3">
+            <label for="newPassword" class="form-label">New Password</label>
+            <input type="password" class="form-control" id="newPassword">
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
         </form>
       </div>
     </div>
@@ -160,6 +207,62 @@ body{
                 alert("Login failed: " + data.detail);
             }
         });
+
+        document.getElementById("resetForm").addEventListener("submit", async function(event){
+  event.preventDefault();
+  const email = document.getElementById("resetEmail").value;
+
+  const response = await fetch("/password_reset", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      email: email
+    })
+  });
+
+  if (response.ok) {
+    alert("Password reset email sent!");
+   
+    $('#passwordResetModal').modal('hide');
+    $('#passwordResetWithTokenModal').modal('show');
+    
+  } else {
+    const data = await response.json();
+    alert("Password reset failed: " + data.detail);
+  }
+});
+
+document.getElementById("passwordResetWithTokenModal").addEventListener("submit", async function(event) {
+  event.preventDefault();
+  const token = document.getElementById("resetToken").value;
+  const newPassword = document.getElementById("newPassword").value;
+
+  const response = await fetch(`/password_reset?token=${token}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      password: newPassword
+    })
+
+  });
+
+  if (response.ok) {
+    alert("Password has been reset!");
+    $('#passwordResetWithTokenModal').modal('hide');
+  } else {
+    try {
+      const data = await response.json();
+      alert("Password reset failed: " + JSON.stringify(data));
+    } catch (error) {
+      console.error("Error parsing JSON:", error);
+      alert("Password reset failed. Please try again later.");
+    }
+  }
+});
 
     // Handle signup form submission
     document.getElementById("signupForm").addEventListener("submit", async function(event){

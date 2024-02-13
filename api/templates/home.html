@@ -13,10 +13,7 @@
   
   <style>
     /* Custom Styles */
-    body {
-      background-color: #f8f9fa;
-      margin-left: 250px;
-    }
+  
 
     .navbar-brand {
       font-size: 1.5rem;
@@ -46,17 +43,33 @@
   width: 100%;
 }
 
+body {
+  background-color: #f8f9fa;
+  margin-left: 250px;
+}
+
 .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 250px;
-    background-color: #05305b;
-    color: #fff;
-    padding: 20px;
-    overflow: auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 250px;
+  background-color: #05305b;
+  color: #fff;
+  padding: 20px;
+  overflow: auto;
+}
+
+/* Media query for screens smaller than 768px */
+@media (max-width: 507px) {
+  body {
+    margin-left: 0px; /* Adjust as needed */
   }
+
+  .sidebar {
+    display: none;
+  }
+}
 
   .profile-icon {
     font-size: 36px;
@@ -94,7 +107,9 @@
 <body>
   <div class="sidebar">
     <i class="fas fa-user-circle profile-icon"></i>
-    <div id="user-details" class="mt-4"></div>
+    <div id="user-details" class="mt-4">
+     
+    </div>
   </div>
  
   <nav class="navbar navbar-expand-lg navbar-dark bg-youtube">
@@ -353,6 +368,9 @@ document.getElementById("logoutButton").addEventListener("click", function(){
                        
             if (response.ok) {
                 alert("Successful! Blog is created");
+                console.log("Hiding modal");
+                $('#createBlogModal').modal('hide');
+                
                
                 
             } else {

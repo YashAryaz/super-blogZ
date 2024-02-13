@@ -26,7 +26,7 @@ async def create_blog(blog: BlogContent,current_user=Depends(get_current_user)):
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail=f"Internal Server Error: {e}")
 
 @router.get("/get_all",response_description="Get all blogs",status_code=status.HTTP_200_OK,response_model=List[BlogContentResponse])
-async def get_blogs(limit:int=4, orderby:str="created_at",current_user=Depends(get_current_user)):
+async def get_blogs(limit:int=10, orderby:str="created_at",current_user=Depends(get_current_user)):
     try:
         blogs = await db["blogPost"].find({"$query":{},"$orderby":{orderby:-1}}).to_list(limit)
         return blogs

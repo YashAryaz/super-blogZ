@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login and Signup</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Custom CSS */
+body{
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; 
+  background-color: rgb(54, 24, 135);
+  /* background-color:  rgb(64, 31, 109); */
+}
+
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  flex-direction: column;
+  background-color: rgb(54, 24, 135);
+  height: 100vh; /* Make the container full height of the viewport */
+  width: 100%;
+  color: aliceblue;
+}
+   
+    .form-container {
+      max-width: 400px;
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      background: rgba(255, 255, 255, 0.8);
+  /* backdrop-filter: saturate(180%) blur(10px); */
+
+      
+      
+    }
+    @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
+  .form-container {
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.5);  
+  }
+}
+    .hidden {
+      display: none;
+    }
+    #Verification{
+      display: none;
+    }
+    
+    
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome to My Blog Application</h1>
+    <p>This is a platform where you can share your thoughts and ideas with others.</p>
+    
+        <div class="form-container" id="loginFormContainer">
+          <h2>Login</h2>
+          <form id="loginForm">
+            <div class="form-group">
+              <label for="loginUsername">Username</label>
+              <input type="text" class="form-control" id="loginUsername" name="loginUsername" required>
+            </div>
+            <div class="form-group">
+              <label for="loginPassword">Password</label>
+              <input type="password" class="form-control" id="loginPassword" name="loginPassword" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+          </form>
+          <p>Don't have an account? <a href="#" id="toggleSignup">Sign up</a></p>
+          <p>Forgot Password?<a href="#" data-toggle="modal" data-target="#passwordResetModal">Reset</a></p>
+        </div>
+        <div class="form-container hidden" id="signupFormContainer">
+          <h2>Signup</h2>
+          <form id="signupForm">
+            <div class="form-group">
+              <label for="signupEmail">Email</label>
+              <input type="email" class="form-control" id="signupEmail" name="signupEmail" required>
+            </div>
+            <div class="form-group">
+              <label for="signupUsername">Username</label>
+              <input type="text" class="form-control" id="signupUsername" name="signupUsername" required>
+            </div>
+            <div class="form-group">
+              <label for="signupPassword">Password</label>
+              <input type="password" class="form-control" id="signupPassword" name="signupPassword" required>
+            </div>
+            <div class="form-group">
+              <label for="signupConfirmPassword">Confirm Password</label>
+              <input type="password" class="form-control" id="signupConfirmPassword" name="signupConfirmPassword" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Signup</button>
+          </form>
+          <p>Already have an account? <a href="#" id="toggleLogin">Login</a></p>
+         
+        </div>
+        <!-- Verification Modal -->
+<div class="modal fade" id="Verification" tabindex="-1" role="dialog" aria-labelledby="verificationModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 style="color: black;" class="modal-title" id="verificationModalLabel">Verification</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="verificationForm">
+          <div class="form-group">
+            <input type="number" class="form-control" id="verificationCode" placeholder="Enter verification code" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Verify</button>
+        </form>
+        <!-- eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1Y2E1YzhkYWM3ZmJlZGEwNWFkODI4OSIsImV4cCI6MTcwNzc2MzU2N30.8zDlHuv-aXEwsUGtZioWejeTimhwzSrqj7-Rk0gEto0 -->
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="passwordResetModal" tabindex="-1" aria-labelledby="passwordResetModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" style="color: black;">
+      <div class="modal-header" >
+        <h5 class="modal-title" id="passwordResetModalLabel">Reset Password</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="resetForm">
+          <div class="mb-3">
+            <label for="resetEmail" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="resetEmail" aria-describedby="emailHelp">
+            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="passwordResetWithTokenModal" tabindex="-1" aria-labelledby="passwordResetWithTokenModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" style="color: black;">
+      <div class="modal-header">
+        <h5 class="modal-title" id="passwordResetWithTokenModalLabel">Reset Password with Token</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="resetWithTokenForm">
+          <div class="mb-3">
+            <label for="resetToken" class="form-label">Token</label>
+            <input type="text" class="form-control" id="resetToken" aria-describedby="tokenHelp">
+            <div id="tokenHelp" class="form-text">Enter the token you received in your email.</div>
+          </div>
+          <div class="mb-3">
+            <label for="newPassword" class="form-label">New Password</label>
+            <input type="password" class="form-control" id="newPassword">
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+      
+  </div>
+
+  <!-- Bootstrap JS and jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    // JavaScript code
+    // Handle login form submission
+    document.getElementById("loginForm").addEventListener("submit", async function(event){
+            event.preventDefault();
+            const username = document.getElementById("loginUsername").value;
+            const password = document.getElementById("loginPassword").value;
+            
+            const response = await fetch("/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: `username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
+        
+
+            });
+          
+            if (response.ok) {
+                const data = await response.json();
+                const accessToken = data.access_token;
+                alert("Login successful! Access Token: " + accessToken);
+                localStorage.setItem('accessToken', accessToken);
+                window.location.href = "/templates/home.html";
+            } else {
+                const data = await response.json();
+                alert("Login failed: " + data.detail);
+            }
+        });
+
+        document.getElementById("resetForm").addEventListener("submit", async function(event){
+  event.preventDefault();
+  const email = document.getElementById("resetEmail").value;
+
+  const response = await fetch("/password_reset", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      email: email
+    })
+  });
+
+  if (response.ok) {
+    alert("Password reset email sent!");
+   
+    $('#passwordResetModal').modal('hide');
+    $('#passwordResetWithTokenModal').modal('show');
+    
+  } else {
+    const data = await response.json();
+    alert("Password reset failed: " + data.detail);
+  }
+});
+
+document.getElementById("passwordResetWithTokenModal").addEventListener("submit", async function(event) {
+  event.preventDefault();
+  const token = document.getElementById("resetToken").value;
+  const newPassword = document.getElementById("newPassword").value;
+
+  const response = await fetch(`/password_reset?token=${token}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      password: newPassword
+    })
+
+  });
+
+  if (response.ok) {
+    alert("Password has been reset!");
+    $('#passwordResetWithTokenModal').modal('hide');
+  } else {
+    try {
+      const data = await response.json();
+      alert("Password reset failed: " + JSON.stringify(data));
+    } catch (error) {
+      console.error("Error parsing JSON:", error);
+      alert("Password reset failed. Please try again later.");
+    }
+  }
+});
+
+    // Handle signup form submission
+    document.getElementById("signupForm").addEventListener("submit", async function(event){
+      event.preventDefault();
+      var email = document.getElementById("signupEmail").value;
+      var username = document.getElementById("signupUsername").value;
+      var password = document.getElementById("signupPassword").value;
+      var cnfpassword = document.getElementById("signupConfirmPassword").value;
+      const ver=document.getElementById('Verification');
+      // Here you can add logic to handle signup process
+      if(cnfpassword===password){
+            const response = await fetch("/registeration", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    name: username,
+                    email: email,
+                    password: password
+                })
+              
+            });
+            const data = await response.json();
+           
+            console.log(data);
+
+            if (response.ok) {
+                alert("Registration successful! Check your email for verification code.");
+                $('#Verification').modal('show');
+                
+            } else {
+                alert("Registration failed: " + data.detail);
+            }
+          }
+        });
+        document.getElementById("verificationForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const verificationCode = document.getElementById("verificationCode").value;
+
+            const response = await fetch(`/verify?code=${verificationCode}`);
+
+            if (response.ok) {
+                const userData = await response.json();
+                alert("Verification successful! User ID: " + userData._id);
+                $('#Verification').modal('hide');
+            } else {
+                const data = await response.json();
+                alert("Verification failed: " + data.detail);
+            }
+        });
+
+    // Toggle between login and signup forms
+    document.getElementById("toggleSignup").addEventListener("click", function(event){
+      event.preventDefault();
+      document.getElementById("loginFormContainer").classList.add("hidden");
+      document.getElementById("signupFormContainer").classList.remove("hidden");
+    });
+
+    document.getElementById("toggleLogin").addEventListener("click", function(event){
+      event.preventDefault();
+      document.getElementById("signupFormContainer").classList.add("hidden");
+      document.getElementById("loginFormContainer").classList.remove("hidden");
+    });
+  </script>
+</body>
+</html>

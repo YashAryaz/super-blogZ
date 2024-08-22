@@ -1,7 +1,7 @@
 # super-blogZ
 
 This project implements a blog API using FastAPI, with a simple frontend using HTML, CSS, JavaScript, Bootstrap, and jQuery. It is connected to a MongoDB cloud cluster for data storage.
-![BlogsApi](https://github.com/YashAryaz/super-blogZ/assets/123569367/59df318e-fe6b-4d2b-91d9-45c83f0c4116)
+![BlogsApi](https://github.com/YashAryaz/super-blogZ/blob/main/BlogsApi.png)
 
 ## Features
 
